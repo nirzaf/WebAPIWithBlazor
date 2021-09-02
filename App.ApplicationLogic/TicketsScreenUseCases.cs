@@ -7,42 +7,42 @@ namespace MyApp.ApplicationLogic
 {
     public class TicketsScreenUseCases : ITicketsScreenUseCases
     {
-        private readonly IProjectRepository projectRepository;
-        private readonly ITicketRepository ticketRepository;
+        private readonly IProjectRepository _projectRepository;
+        private readonly ITicketRepository _ticketRepository;
 
         public TicketsScreenUseCases(IProjectRepository projectRepository,
             ITicketRepository ticketRepository)
         {
-            this.projectRepository = projectRepository;
-            this.ticketRepository = ticketRepository;
+            _projectRepository = projectRepository;
+            _ticketRepository = ticketRepository;
         }
 
         public async Task<IEnumerable<Ticket>> ViewTickets(int projectId)
         {
-            return await projectRepository.GetProjectTicketsAsync(projectId);
+            return await _projectRepository.GetProjectTicketsAsync(projectId);
         }
 
         public async Task<IEnumerable<Ticket>> SearchTickets(string filter)
         {
-            if (!int.TryParse(filter, out var ticketId)) return await ticketRepository.GetAsync(filter);
-            var ticket = await ticketRepository.GetByIdAsync(ticketId);
+            if (!int.TryParse(filter, out var ticketId)) return await _ticketRepository.GetAsync(filter);
+            var ticket = await _ticketRepository.GetByIdAsync(ticketId);
             var tickets = new List<Ticket> { ticket };
             return tickets;
         }
 
         public async Task<IEnumerable<Ticket>> ViewOwnersTickets(int projectId, string ownerName)
         {
-            return await projectRepository.GetProjectTicketsAsync(projectId, ownerName);
+            return await _projectRepository.GetProjectTicketsAsync(projectId, ownerName);
         }
 
         public async Task<Ticket> ViewTicketById(int ticketId)
         {
-            return await ticketRepository.GetByIdAsync(ticketId);
+            return await _ticketRepository.GetByIdAsync(ticketId);
         }
 
         public async Task UpdateTicket(Ticket ticket)
         {
-            await ticketRepository.UpdateAsync(ticket);
+            await _ticketRepository.UpdateAsync(ticket);
         }
     }
 }
