@@ -79,9 +79,10 @@ namespace WebApi.Auth
             {
                 return false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                Console.WriteLine(ex.Message);
+                return false;
             }
 
             return securityToken != null;
