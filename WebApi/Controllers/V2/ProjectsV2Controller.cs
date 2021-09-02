@@ -3,11 +3,8 @@ using DataStore.EF;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebApi.Filters;
 using WebApi.QueryFilters;
 
 namespace PlatformDemo.Controllers.V2
@@ -41,16 +38,16 @@ namespace PlatformDemo.Controllers.V2
 
             return Ok(project);
         }
-        
+
         [HttpGet]
         [Route("/api/projects/{pid:int}/tickets")]
-        public async Task<IActionResult> GetProjectTickets(int pId, 
+        public async Task<IActionResult> GetProjectTickets(int pId,
             [FromQuery] ProjectTicketQueryFilter filter)
         {
-            IQueryable<Ticket> tickets = db.Tickets.Where(t => t.ProjectId == pId);
+            var tickets = db.Tickets.Where(t => t.ProjectId == pId);
             if (filter != null && !string.IsNullOrWhiteSpace(filter.Owner))
                 tickets = tickets.Where(t => !string.IsNullOrWhiteSpace(t.Owner) &&
-                    t.Owner.ToLower() == filter.Owner.ToLower());
+                                             t.Owner.ToLower() == filter.Owner.ToLower());
 
             var listTickets = await tickets.ToListAsync();
             if (listTickets == null || listTickets.Count <= 0)
@@ -66,9 +63,9 @@ namespace PlatformDemo.Controllers.V2
             await db.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetById),
-                    new { id = project.ProjectId },
-                    project
-                );
+                new { id = project.ProjectId },
+                project
+            );
         }
 
         [HttpPut("{id}")]
@@ -88,7 +85,7 @@ namespace PlatformDemo.Controllers.V2
                     return NotFound();
                 throw;
             }
-            
+
 
             return NoContent();
         }
@@ -104,6 +101,5 @@ namespace PlatformDemo.Controllers.V2
 
             return Ok(project);
         }
-
     }
 }
