@@ -1,0 +1,28 @@
+﻿
+@if (Ticket != null)
+{
+    <tr>
+        <td>
+            <NavLink href="@($"/tickets/{Ticket.TicketId}")">
+                @Ticket.Title
+            </NavLink>            
+        </td>
+        <td>
+            @Ticket.Owner
+        </td>
+        <td>
+            @(Ticket.ReportDate.HasValue?Ticket.ReportDate.Value.ToString("yyyy-MM-dd"):string.Empty)
+        </td>
+        <td>
+            @(Ticket.DueDate.HasValue?Ticket.DueDate.Value.ToString("yyyy-MM-dd"): string.Empty)
+        </td>
+    </tr>
+
+}
+
+@code {
+
+    [Parameter]
+    public Ticket Ticket { get; set; }
+
+}

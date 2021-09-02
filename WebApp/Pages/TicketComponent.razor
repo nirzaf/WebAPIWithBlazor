@@ -1,0 +1,126 @@
+﻿@page "/tickets/{ticketId:int}"
+@page "/projects/{projectId:int}/addticket"
+
+
+@attribute [Authorize]
+
+@inject NavigationManager NavigationManager
+@inject ITicketsScreenUseCases TicketsScreenUseCases
+@inject ITicketScreenUseCases TicketScreenUseCases
+
+<h3>Ticket</h3>
+<br />
+
+<AlertComponent @ref="alertComponent"></AlertComponent>
+
+@if (ticket != null)
+{
+    <EditForm Model="ticket" OnValidSubmit="Save">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <ValidationSummary></ValidationSummary>
+
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <InputText class="form-control" id="title" @bind-Value="ticket.Title"></InputText>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <InputText class="form-control" id="description" @bind-Value="ticket.Description"></InputText>
+        </div>
+        <div class="mb-3">
+            <label for="owner" class="form-label">Owner</label>
+            <InputText class="form-control" id="owner" @bind-Value="ticket.Owner" readonly></InputText>
+        </div>
+        <div class="mb-3">
+            <label for="reportdate" class="form-label">Report Date</label>
+            <InputDate class="form-control" id="reportdate" @bind-Value="ticket.ReportDate"></InputDate>
+        </div>
+        <div class="mb-3">
+            <label for="duedate" class="form-label">Due Date</label>
+            <InputDate class="form-control" id="duedate" @bind-Value="ticket.DueDate"></InputDate>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Save</button>
+        &nbsp;
+        <button class="btn btn-danger" type="button" @onclick="DeleteTicket">Delete</button>
+    </EditForm>
+
+}
+
+@code {
+    Ticket ticket;
+    AlertComponent alertComponent;
+
+    [Parameter]
+    public int? TicketId { get; set; }
+
+    [Parameter]
+    public int? ProjectId { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (TicketId.HasValue)
+            ticket = await TicketsScreenUseCases.ViewTicketById(TicketId.Value);
+
+        if (ProjectId.HasValue && ticket == null)
+            ticket = new Ticket { ProjectId = this.ProjectId.Value };
+    }
+
+    async Task Save()
+    {
+        bool bSuccess = true;
+
+        if (!ticket.ValidateDescription())
+        {
+            alertComponent.ErrorMessage = "Description is required";
+            alertComponent.Show();
+            bSuccess = false;
+        }
+
+        if (!ticket.ValidateFutureDueDate())
+        {
+            alertComponent.ErrorMessage = "The due date must be in the future.";
+            alertComponent.Show();
+            bSuccess = false;
+        }
+
+        if (!ticket.ValidateReportDatePresence())
+        {
+            alertComponent.ErrorMessage = "The Report Date is required.";
+            alertComponent.Show();
+            bSuccess = false;
+        }
+
+        if (!ticket.ValidateDueDatePresence())
+        {
+            alertComponent.ErrorMessage = "The Due Date is required.";
+            alertComponent.Show();
+            bSuccess = false;
+        }
+
+        if (!ticket.ValidateDueDateAfterReportDate())
+        {
+            alertComponent.ErrorMessage = "The Due Date must be later than the Report Date.";
+            alertComponent.Show();
+            bSuccess = false;
+        }
+
+        if (bSuccess)
+        {
+            if (TicketId.HasValue)
+                await TicketsScreenUseCases.UpdateTicket(ticket);
+            else
+                await TicketScreenUseCases.AddTicket(ticket);
+
+            NavigationManager.NavigateTo($"/projects/{ticket.ProjectId}/tickets");
+        }
+    }
+
+    async Task DeleteTicket()
+    {
+        if (!TicketId.HasValue) return;
+
+        await TicketScreenUseCases.DeleteTicket(TicketId.Value);
+        NavigationManager.NavigateTo($"/projects/{ticket.ProjectId}/tickets");
+    }
+}

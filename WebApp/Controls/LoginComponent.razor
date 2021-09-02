@@ -1,0 +1,54 @@
+﻿@using WebApp.ViewModels
+
+@inject NavigationManager NavigationManager
+@inject IAuthenticationUseCases AuthenticationUseCases
+
+<AlertComponent @ref="alertComponent"></AlertComponent>
+
+<h3>Login</h3>
+
+@if (userViewModel != null)
+{
+
+    <EditForm Model="userViewModel" OnValidSubmit="Login">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <ValidationSummary></ValidationSummary>
+
+        <div class="form-group">
+            <label for="name">User Name</label>
+            <InputText id="name" @bind-Value="userViewModel.UserName" class="form-control"></InputText>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <InputText id="passord" @bind-Value="userViewModel.Password" class="form-control" type="password"></InputText>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+    </EditForm>
+}
+
+
+@code {
+    AlertComponent alertComponent;
+
+    UserViewModel userViewModel;
+
+    protected override void OnInitialized()
+    {
+        userViewModel = new UserViewModel();
+    }
+
+    async Task Login()
+    {
+        var token = await AuthenticationUseCases.LoginAsync(userViewModel.UserName, userViewModel.Password);
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            alertComponent.ErrorMessage = "Login Failled.";
+            alertComponent.Show();
+        }
+        else
+            NavigationManager.NavigateTo("/", true);
+    }
+
+}

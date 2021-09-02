@@ -1,0 +1,97 @@
+﻿@page "/projects/{projectId:int}/tickets"
+
+@inject NavigationManager NavigationManager
+@inject ITicketsScreenUseCases TicketsScreenUseCases
+
+@attribute [Authorize]
+
+<h3>Tickets</h3>
+<br />
+
+<div class="row">
+    <div class="col-auto">
+        <input type="text" class="form-control" @bind-value="searchFilter" />
+    </div>
+    <div class="col-auto">
+        <button type="button" class="btn btn-light" @onclick="OnSearch">Search</button>
+    </div>
+    <div class="col-auto">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="myticket" @bind-value="ViewMyTickets" />
+            <label class="form-check-label" for="myticket">View My Tickets</label>
+        </div>
+    </div>
+</div>
+<br />
+
+@if (tickets != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Owner</th>
+                <th>Report Date</th>
+                <th>Due Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in tickets)
+            {
+                <TicketRowComponent Ticket="ticket"></TicketRowComponent>
+
+            }
+        </tbody>
+    </table>
+    <button class="btn btn-primary" @onclick="AddTicket">Add Ticket</button>
+
+}
+
+
+@code {
+
+    IEnumerable<Ticket> tickets;
+    string searchFilter;
+
+    [Parameter]
+    public int ProjectId { get; set; }
+
+    bool viewMyTickets = false;
+    public bool ViewMyTickets
+    {
+        get => viewMyTickets;
+        set
+        {
+            viewMyTickets = value;
+
+            Task.Run(async () =>
+            {
+                if (viewMyTickets)
+                    tickets = await TicketsScreenUseCases.ViewOwnersTickets(ProjectId, "Frank Liu");
+                else
+                    tickets = await TicketsScreenUseCases.ViewTickets(ProjectId);
+                StateHasChanged();
+            });
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        tickets = await TicketsScreenUseCases.ViewTickets(ProjectId);
+        Console.WriteLine($"ProjectId is set: {ProjectId}, tickets are listed below:");
+        foreach (var ticket in tickets)
+        {
+            Console.WriteLine($"  ticket tile: {ticket.Title}");
+        }
+    }
+
+    private async Task OnSearch()
+    {
+        tickets = await TicketsScreenUseCases.SearchTickets(searchFilter);
+    }
+
+    private void AddTicket()
+    {
+        NavigationManager.NavigateTo($"/projects/{ProjectId}/addticket");
+    }
+}
