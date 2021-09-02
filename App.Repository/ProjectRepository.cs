@@ -1,9 +1,6 @@
 ﻿using MyApp.Repository.ApiClient;
 using Core.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MyApp.Repository
@@ -29,9 +26,9 @@ namespace MyApp.Repository
 
         public async Task<IEnumerable<Ticket>> GetProjectTicketsAsync(int projectId, string filter = null)
         {
-            string uri = $"api/projects/{projectId}/tickets";
-            if (!string.IsNullOrWhiteSpace(filter))            
-                uri += $"?owner={filter}&api-version=2.0";            
+            var uri = $"api/projects/{projectId}/tickets";
+            if (!string.IsNullOrWhiteSpace(filter))
+                uri += $"?owner={filter}&api-version=2.0";
 
             return await webApiExecuter.InvokeGet<IEnumerable<Ticket>>(uri);
         }

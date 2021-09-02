@@ -1,10 +1,6 @@
-﻿
-using MyApp.Repository.ApiClient;
+﻿using MyApp.Repository.ApiClient;
 using Core.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MyApp.Repository
@@ -20,7 +16,7 @@ namespace MyApp.Repository
 
         public async Task<IEnumerable<Ticket>> GetAsync(string filter = null)
         {
-            string uri = "api/tickets?api-version=2.0";
+            var uri = "api/tickets?api-version=2.0";
             if (!string.IsNullOrWhiteSpace(filter))
                 uri += $"&titleordescription={filter.Trim()}";
 
@@ -49,14 +45,3 @@ namespace MyApp.Repository
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-

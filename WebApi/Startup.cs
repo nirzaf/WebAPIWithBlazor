@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DataStore.EF;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,7 +16,7 @@ namespace PlatformDemo
 
         public Startup(IWebHostEnvironment env)
         {
-            this._env = env;
+            _env = env;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -33,12 +27,7 @@ namespace PlatformDemo
             services.AddSingleton<ICustomUserManager, CustomUserManager>();
 
             if (_env.IsDevelopment())
-            {
-                services.AddDbContext<BugsContext>(options =>
-                {
-                    options.UseInMemoryDatabase("Bugs");
-                });
-            }
+                services.AddDbContext<BugsContext>(options => { options.UseInMemoryDatabase("Bugs"); });
 
             services.AddControllers();
 
@@ -77,17 +66,19 @@ namespace PlatformDemo
 
             services.AddVersionedApiExplorer(options => options.GroupNameFormat = "'v'VVV");
 
-            services.AddSwaggerGen(options => {
+            services.AddSwaggerGen(options =>
+            {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "My Web API v1", Version = "version 1" });
                 options.SwaggerDoc("v2", new OpenApiInfo { Title = "My Web API v2", Version = "version 2" });
             });
 
-            services.AddCors(options => {
+            services.AddCors(options =>
+            {
                 options.AddDefaultPolicy(builder =>
                 {
                     builder.WithOrigins("https://localhost:44393")
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();                    
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                 });
             });
         }
@@ -106,22 +97,19 @@ namespace PlatformDemo
                 //Configure OpenAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(
-                        options => {
-                            options.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1");
-                            options.SwaggerEndpoint("/swagger/v2/swagger.json", "WebAPI v2");
-                        });
+                    options =>
+                    {
+                        options.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1");
+                        options.SwaggerEndpoint("/swagger/v2/swagger.json", "WebAPI v2");
+                    });
             }
 
             app.UseRouting();
             app.UseCors();
-
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

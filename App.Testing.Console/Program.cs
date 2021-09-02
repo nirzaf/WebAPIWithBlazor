@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 HttpClient httpClient = new();
-IWebApiExecuter apiExectuer = new WebApiExecuter("https://localhost:44314", httpClient, new TokenRepository(null));
+IWebApiExecuter apiExecutor = new WebApiExecuter("https://localhost:44314", httpClient, new TokenRepository(null));
 
 //await TestProjects();
 
@@ -43,17 +43,14 @@ async Task TestProjects()
 
 async Task GetProjects()
 {
-    ProjectRepository repository = new(apiExectuer);
+    ProjectRepository repository = new(apiExecutor);
     var projects = await repository.GetAsync();
-    foreach (var project in projects)
-    {
-        Console.WriteLine($"Project: {project.Name}");
-    }
+    foreach (var project in projects) Console.WriteLine($"Project: {project.Name}");
 }
 
 async Task<Project> GetProject(int id)
 {
-    ProjectRepository repository = new(apiExectuer);
+    ProjectRepository repository = new(apiExecutor);
     return await repository.GetByIdAsync(id);
 }
 
@@ -62,37 +59,35 @@ async Task GetProjectTickets(int id)
     var project = await GetProject(id);
     Console.WriteLine($"Project: {project.Name}");
 
-    ProjectRepository repository = new(apiExectuer);
+    ProjectRepository repository = new(apiExecutor);
     var tickets = await repository.GetProjectTicketsAsync(id);
-    foreach (var ticket in tickets)
-    {
-        Console.WriteLine($"    Ticket: {ticket.Title}");
-    }
+    foreach (var ticket in tickets) Console.WriteLine($"    Ticket: {ticket.Title}");
 }
 
 async Task<int> CreateProject()
 {
     var project = new Project { Name = "Another Project" };
-    ProjectRepository repository = new(apiExectuer);
+    ProjectRepository repository = new(apiExecutor);
     return await repository.CreateAsync(project);
 }
 
 async Task UpdateProject(Project project)
 {
-    ProjectRepository repository = new(apiExectuer);
+    ProjectRepository repository = new(apiExecutor);
     project.Name += " updated";
     await repository.UpdateAsync(project);
 }
 
 async Task DeleteProject(int id)
 {
-    ProjectRepository repository = new(apiExectuer);
+    ProjectRepository repository = new(apiExecutor);
     await repository.DeleteAsync(id);
 }
 
 #endregion
 
 #region Test Tickets
+
 async Task TestTickets()
 {
     Console.WriteLine("////////////////////");
@@ -122,24 +117,21 @@ async Task TestTickets()
 
 async Task GetTickets(string filter = null)
 {
-    TicketRepository ticketRepository = new(apiExectuer);
+    TicketRepository ticketRepository = new(apiExecutor);
     var tickets = await ticketRepository.GetAsync(filter);
-    foreach (var ticket in tickets)
-    {
-        Console.WriteLine($"Ticket: {ticket.Title}");
-    }
+    foreach (var ticket in tickets) Console.WriteLine($"Ticket: {ticket.Title}");
 }
 
 async Task<Ticket> GetTicketById(int id)
 {
-    TicketRepository ticketRepository = new(apiExectuer);
+    TicketRepository ticketRepository = new(apiExecutor);
     var ticket = await ticketRepository.GetByIdAsync(id);
     return ticket;
 }
 
 async Task<int> CreateTicket()
 {
-    TicketRepository ticketRepository = new(apiExectuer);
+    TicketRepository ticketRepository = new(apiExecutor);
     return await ticketRepository.CreateAsync(new Ticket
     {
         ProjectId = 2,
@@ -150,14 +142,14 @@ async Task<int> CreateTicket()
 
 async Task UpdateTicket(Ticket ticket)
 {
-    TicketRepository ticketRepository = new(apiExectuer);
+    TicketRepository ticketRepository = new(apiExecutor);
     ticket.Title += " Updated";
     await ticketRepository.UpdateAsync(ticket);
 }
 
 async Task DeleteTicket(int id)
 {
-    TicketRepository ticketRepository = new(apiExectuer);
+    TicketRepository ticketRepository = new(apiExecutor);
     await ticketRepository.DeleteAsync(id);
 }
 

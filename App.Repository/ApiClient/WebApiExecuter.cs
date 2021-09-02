@@ -1,26 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MyApp.Repository.ApiClient
 {
     public class WebApiExecuter : IWebApiExecuter
     {
+        private TokenRepository tokenRepository { get; }
         private readonly string baseUrl;
         private readonly HttpClient httpClient;
 
-        public WebApiExecuter(HttpClient httpClient)
+        public WebApiExecuter(string baseUrl, HttpClient httpClient, TokenRepository tokenRepository)
         {
-            this.baseUrl = httpClient.BaseAddress.AbsoluteUri;
+            this.baseUrl = baseUrl;
+            this.tokenRepository = tokenRepository;
+            if (httpClient.BaseAddress is not null) baseUrl = httpClient.BaseAddress.AbsoluteUri;
             this.httpClient = httpClient;
             httpClient.DefaultRequestHeaders.Clear();
             httpClient.DefaultRequestHeaders.Accept.Clear();
-            httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders.Accept.Add(
+                new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
+
 
         public async Task<T> InvokeGet<T>(string uri)
         {
