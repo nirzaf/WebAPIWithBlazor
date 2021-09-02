@@ -1,23 +1,21 @@
-﻿
-@if (Ticket != null)
+﻿@if (Ticket != null)
 {
     <tr>
         <td>
             <NavLink href="@($"/tickets/{Ticket.TicketId}")">
                 @Ticket.Title
-            </NavLink>            
+            </NavLink>
         </td>
         <td>
             @Ticket.Owner
         </td>
         <td>
-            @(Ticket.ReportDate.HasValue?Ticket.ReportDate.Value.ToString("yyyy-MM-dd"):string.Empty)
+            @(Ticket.ReportDate.HasValue ? Ticket.ReportDate.Value.ToString("yyyy-MM-dd") : string.Empty)
         </td>
         <td>
-            @(Ticket.DueDate.HasValue?Ticket.DueDate.Value.ToString("yyyy-MM-dd"): string.Empty)
+            @(Ticket.DueDate.HasValue ? Ticket.DueDate.Value.ToString("yyyy-MM-dd") : string.Empty)
         </td>
     </tr>
-
 }
 
 @code {

@@ -9,7 +9,7 @@
 @inject ITicketScreenUseCases TicketScreenUseCases
 
 <h3>Ticket</h3>
-<br />
+<br/>
 
 <AlertComponent @ref="alertComponent"></AlertComponent>
 
@@ -44,7 +44,6 @@
         &nbsp;
         <button class="btn btn-danger" type="button" @onclick="DeleteTicket">Delete</button>
     </EditForm>
-
 }
 
 @code {
@@ -63,12 +62,12 @@
             ticket = await TicketsScreenUseCases.ViewTicketById(TicketId.Value);
 
         if (ProjectId.HasValue && ticket == null)
-            ticket = new Ticket { ProjectId = this.ProjectId.Value };
+            ticket = new Ticket { ProjectId = ProjectId.Value };
     }
 
     async Task Save()
     {
-        bool bSuccess = true;
+        var bSuccess = true;
 
         if (!ticket.ValidateDescription())
         {
@@ -123,4 +122,5 @@
         await TicketScreenUseCases.DeleteTicket(TicketId.Value);
         NavigationManager.NavigateTo($"/projects/{ticket.ProjectId}/tickets");
     }
+
 }

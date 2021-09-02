@@ -14,7 +14,7 @@ namespace MyApp.Repository
         public TokenRepository(IJSRuntime iJSRuntime)
         {
             this.iJSRuntime = iJSRuntime;
-        }        
+        }
 
         public async Task SetToken(string token)
         {

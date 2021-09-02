@@ -7,7 +7,7 @@ namespace WebApi.Auth
 {
     public class CustomTokenManager : ICustomTokenManager
     {
-        private List<Token> tokens = new List<Token>();
+        private List<Token> tokens = new();
 
         public string CreateToken(string userName)
         {
@@ -19,8 +19,7 @@ namespace WebApi.Auth
 
         public bool VerifyToken(string token)
         {
-
-            return tokens.Any(x => token != null && token.Contains(x.TokenString));            
+            return tokens.Any(x => token != null && token.Contains(x.TokenString));
         }
 
         public string GetUserInfoByToken(string tokenString)

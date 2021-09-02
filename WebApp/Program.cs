@@ -31,8 +31,8 @@ namespace WebApp
                 .CreateClient("WebAPI"));
 
             builder.Services.AddHttpClient(
-                "WebAPI",
-                client => client.BaseAddress = new Uri("https://localhost:44314/"))
+                    "WebAPI",
+                    client => client.BaseAddress = new Uri("https://localhost:44314/"))
                 .AddHttpMessageHandler<AuthorizationMessageHandler>();
 
             builder.Services.AddTransient<AuthorizationMessageHandler>(sp =>
@@ -44,15 +44,15 @@ namespace WebApp
                 // Create a new "AuthorizationMessageHandler" instance,
                 // and return it after configuring it.
                 var handler = new AuthorizationMessageHandler(provider, naviManager);
-                handler.ConfigureHandler(authorizedUrls: new[] {
-                  // List up URLs which to be attached access token.
-                  "https://localhost:44314/"
+                handler.ConfigureHandler(new[]
+                {
+                    // List up URLs which to be attached access token.
+                    "https://localhost:44314/"
                 });
                 return handler;
             });
 
-            builder.Services.AddSingleton<IWebApiExecuter,WebApiExecuter>();
-
+            builder.Services.AddSingleton<IWebApiExecuter, WebApiExecuter>();
 
 
             //builder.Services.AddTransient<IAuthenticationRepository, AuthenticationRepository>();
@@ -71,7 +71,7 @@ namespace WebApp
                 // For more information, see https://aka.ms/blazor-standalone-auth
                 builder.Configuration.Bind("Local", options.ProviderOptions);
 
-                options.ProviderOptions.DefaultScopes.Add("webapi");                
+                options.ProviderOptions.DefaultScopes.Add("webapi");
             });
 
             await builder.Build().RunAsync();

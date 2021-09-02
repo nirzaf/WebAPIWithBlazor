@@ -18,7 +18,7 @@ namespace WebApi.Filters.V2
             if (ticket != null && !ticket.ValidateDescription())
             {
                 context.ModelState.AddModelError("Description", "Description is required.");
-                context.Result = new BadRequestObjectResult(context.ModelState);                    
+                context.Result = new BadRequestObjectResult(context.ModelState);
             }
         }
     }

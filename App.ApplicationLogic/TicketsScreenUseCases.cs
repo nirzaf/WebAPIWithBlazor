@@ -27,12 +27,12 @@ namespace MyApp.ApplicationLogic
 
         public async Task<IEnumerable<Ticket>> SearchTickets(string filter)
         {
-            if (int.TryParse(filter, out int ticketId))
+            if (int.TryParse(filter, out var ticketId))
             {
                 var ticket = await ticketRepository.GetByIdAsync(ticketId);
                 var tickets = new List<Ticket>();
                 tickets.Add(ticket);
-                return tickets;                
+                return tickets;
             }
 
             return await ticketRepository.GetAsync(filter);

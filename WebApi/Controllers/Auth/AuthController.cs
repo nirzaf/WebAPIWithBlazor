@@ -7,7 +7,7 @@ using WebApi.Auth;
 
 namespace WebApi.Controllers.Auth
 {
-    [ApiController]    
+    [ApiController]
     public class AuthController : ControllerBase
     {
         private readonly ICustomUserManager customUserManager;

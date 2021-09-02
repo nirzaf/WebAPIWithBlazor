@@ -34,5 +34,4 @@ namespace MyApp.ApplicationLogic
             await tokenRepository.SetToken(string.Empty);
         }
     }
-    
 }

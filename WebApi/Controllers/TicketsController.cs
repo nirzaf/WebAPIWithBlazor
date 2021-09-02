@@ -15,7 +15,7 @@ namespace PlatformDemo.Controllers
     [ApiController]
     [Route("api/[controller]")]
     //[CustomTokenAuthFilter]
-    [Authorize(policy: "WebApiWriteScope")]
+    [Authorize("WebApiWriteScope")]
     public class TicketsController : ControllerBase
     {
         private readonly BugsContext db;
@@ -26,13 +26,13 @@ namespace PlatformDemo.Controllers
         }
 
 
-        [HttpGet]        
+        [HttpGet]
         public async Task<IActionResult> Get()
-        {           
+        {
             return Ok(await db.Tickets.ToListAsync());
         }
 
-        [HttpGet("{id}")]        
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var ticket = await db.Tickets.FindAsync(id);
@@ -42,19 +42,19 @@ namespace PlatformDemo.Controllers
             return Ok(ticket);
         }
 
-        [HttpPost]        
-        public async Task<IActionResult> Post([FromBody]Ticket ticket)
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] Ticket ticket)
         {
             db.Tickets.Add(ticket);
             await db.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetById),
-                    new { id = ticket.TicketId },
-                    ticket
-                );
-        }        
+                new { id = ticket.TicketId },
+                ticket
+            );
+        }
 
-        [HttpPut("{id}")]        
+        [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] Ticket ticket)
         {
             if (id != ticket.TicketId) return BadRequest();
@@ -71,11 +71,11 @@ namespace PlatformDemo.Controllers
                     return NotFound();
                 throw;
             }
-            
+
             return NoContent();
         }
 
-        [HttpDelete("{id}")]        
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var ticket = await db.Tickets.FindAsync(id);
@@ -86,6 +86,5 @@ namespace PlatformDemo.Controllers
 
             return Ok(ticket);
         }
-
     }
 }

@@ -27,17 +27,17 @@ namespace WebApi.Auth
         {
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new System.Security.Claims.ClaimsIdentity(                
+                Subject = new ClaimsIdentity(
                     new Claim[]
                     {
-                        new Claim(ClaimTypes.Name, userName)
+                        new(ClaimTypes.Name, userName)
                     }
                 ),
                 Expires = DateTime.UtcNow.AddMinutes(30),
                 SigningCredentials = new SigningCredentials(
-                        new SymmetricSecurityKey(secrectKey),
-                        SecurityAlgorithms.HmacSha256Signature
-                    )
+                    new SymmetricSecurityKey(secrectKey),
+                    SecurityAlgorithms.HmacSha256Signature
+                )
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -63,17 +63,17 @@ namespace WebApi.Auth
             try
             {
                 tokenHandler.ValidateToken(
-                token.Replace("\"", string.Empty),
-                new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(secrectKey),
-                    ValidateLifetime = true,
-                    ValidateAudience = false,
-                    ValidateIssuer = false,
-                    ClockSkew = TimeSpan.Zero
-                },
-                out securityToken);
+                    token.Replace("\"", string.Empty),
+                    new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(secrectKey),
+                        ValidateLifetime = true,
+                        ValidateAudience = false,
+                        ValidateIssuer = false,
+                        ClockSkew = TimeSpan.Zero
+                    },
+                    out securityToken);
             }
             catch (SecurityTokenException)
             {

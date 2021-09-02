@@ -9,8 +9,7 @@ using WebApi.Auth;
 namespace WebApi.Filters
 {
     public class CustomTokenAuthFilterAttribute : Attribute, IAuthorizationFilter
-    {       
-
+    {
         private string TokenHeader = "TokenHeader";
         private readonly ICustomTokenManager tokenManager;
 
@@ -22,7 +21,8 @@ namespace WebApi.Filters
                 return;
             }
 
-            var tokenManager = context.HttpContext.RequestServices.GetService(typeof(ICustomTokenManager)) as ICustomTokenManager;       
+            var tokenManager =
+                context.HttpContext.RequestServices.GetService(typeof(ICustomTokenManager)) as ICustomTokenManager;
             if (tokenManager == null || !tokenManager.VerifyToken(token))
             {
                 context.Result = new UnauthorizedResult();

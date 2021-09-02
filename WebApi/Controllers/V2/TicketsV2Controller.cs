@@ -25,8 +25,8 @@ namespace PlatformDemo.Controllers.V2
         public TicketsV2Controller(BugsContext db)
         {
             this.db = db;
-        }                
-        
+        }
+
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] TicketQueryFilter ticketQueryFilter)
         {
@@ -39,16 +39,16 @@ namespace PlatformDemo.Controllers.V2
 
                 if (!string.IsNullOrWhiteSpace(ticketQueryFilter.TitleOrDescription))
                     tickets = tickets.Where(x => x.Title.Contains(ticketQueryFilter.TitleOrDescription,
-                       StringComparison.OrdinalIgnoreCase) || 
-                       x.Description.Contains(ticketQueryFilter.TitleOrDescription,
-                       StringComparison.OrdinalIgnoreCase));                
-            }            
-            
+                                                     StringComparison.OrdinalIgnoreCase) ||
+                                                 x.Description.Contains(ticketQueryFilter.TitleOrDescription,
+                                                     StringComparison.OrdinalIgnoreCase));
+            }
+
 
             return Ok(await tickets.ToListAsync());
         }
 
-        [HttpGet("{id}")]        
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var ticket = await db.Tickets.FindAsync(id);
@@ -60,16 +60,16 @@ namespace PlatformDemo.Controllers.V2
 
         [HttpPost]
         [Ticket_EnsureDescriptionPresentActionFilter]
-        public async Task<IActionResult> Post([FromBody]Ticket ticket)
+        public async Task<IActionResult> Post([FromBody] Ticket ticket)
         {
             db.Tickets.Add(ticket);
             await db.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetById),
-                    new { id = ticket.TicketId },
-                    ticket
-                );
-        }        
+                new { id = ticket.TicketId },
+                ticket
+            );
+        }
 
         [HttpPut("{id}")]
         [Ticket_EnsureDescriptionPresentActionFilter]
@@ -89,11 +89,11 @@ namespace PlatformDemo.Controllers.V2
                     return NotFound();
                 throw;
             }
-            
+
             return NoContent();
         }
 
-        [HttpDelete("{id}")]        
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var ticket = await db.Tickets.FindAsync(id);
@@ -104,6 +104,5 @@ namespace PlatformDemo.Controllers.V2
 
             return Ok(ticket);
         }
-
     }
 }

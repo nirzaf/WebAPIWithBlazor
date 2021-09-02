@@ -2,6 +2,6 @@
 {
     public interface ICustomUserManager
     {
-        string Authenticate(string userName, string password);        
+        string Authenticate(string userName, string password);
     }
 }

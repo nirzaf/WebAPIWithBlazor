@@ -1,7 +1,7 @@
 ﻿@inject NavigationManager NavigationManager
 @inject IAuthenticationUseCases AuthenticationUseCases
 
-@if(userName != null)
+@if (userName != null)
 {
     <text>Welcome @userName </text>
     <button type="button" @onclick="Logout" class="btn btn-dark">Log out</button>

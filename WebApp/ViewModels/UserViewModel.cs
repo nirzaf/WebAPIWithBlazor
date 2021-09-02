@@ -8,8 +8,7 @@ namespace WebApp.ViewModels
 {
     public class UserViewModel
     {
-        [Required]
-        public string UserName { get; set; }
+        [Required] public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

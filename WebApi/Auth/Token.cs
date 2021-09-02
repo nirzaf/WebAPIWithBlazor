@@ -9,9 +9,9 @@ namespace WebApi.Auth
     {
         public Token(string userName)
         {
-            this.UserName = userName;
-            this.TokenString = Guid.NewGuid().ToString();
-            this.ExpiryDate = DateTime.Now.AddMinutes(10);
+            UserName = userName;
+            TokenString = Guid.NewGuid().ToString();
+            ExpiryDate = DateTime.Now.AddMinutes(10);
         }
 
         public string TokenString { get; set; }

@@ -10,19 +10,14 @@ namespace Core.Models
     {
         public int? TicketId { get; set; }
 
-        [Required]
-        public int? ProjectId { get; set; }
+        [Required] public int? ProjectId { get; set; }
 
-        [Required]
-        [StringLength(100)]
-        public string Title { get; set; }
+        [Required] [StringLength(100)] public string Title { get; set; }
         public string Description { get; set; }
 
-        [StringLength(50)]
-        public string Owner { get; set; }
+        [StringLength(50)] public string Owner { get; set; }
 
-        [Ticket_EnsureReportDatePresent]
-        public DateTime? ReportDate { get; set; }
+        [Ticket_EnsureReportDatePresent] public DateTime? ReportDate { get; set; }
 
         [Ticket_EnsureDueDatePresent]
         [Ticket_EnsureFutureDueDateOnCreation]
@@ -44,7 +39,7 @@ namespace Core.Models
             if (TicketId.HasValue) return true;
             if (!DueDate.HasValue) return true;
 
-            return (DueDate.Value > DateTime.Now);
+            return DueDate.Value > DateTime.Now;
         }
 
         /// <summary>

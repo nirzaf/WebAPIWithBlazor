@@ -7,7 +7,7 @@ namespace WebApi.Auth
 {
     public class CustomUserManager : ICustomUserManager
     {
-        private Dictionary<string, string> credentials = new Dictionary<string, string>()
+        private Dictionary<string, string> credentials = new()
         {
             { "frank", "password" },
             { "tom", "password1" }
@@ -26,7 +26,7 @@ namespace WebApi.Auth
             if (!string.IsNullOrWhiteSpace(userName) && credentials[userName] != password) return string.Empty;
 
             //generate token
-            return customTokenManager.CreateToken(userName);            
-        }        
+            return customTokenManager.CreateToken(userName);
+        }
     }
 }

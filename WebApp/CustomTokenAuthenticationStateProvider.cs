@@ -21,13 +21,13 @@ namespace WebApp
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
-        {            
+        {
             var userName = await authenticationRepository.GetUserInfoAsync(await tokenRepository.GetToken());
             if (!string.IsNullOrWhiteSpace(userName))
             {
                 var claims = new List<Claim>();
                 var claim = new Claim(ClaimTypes.Name, userName);
-                claims.Add(claim);                
+                claims.Add(claim);
 
                 var identity = new ClaimsIdentity(claims, "Custom Token Auth");
                 var principal = new ClaimsPrincipal(identity);
@@ -35,7 +35,7 @@ namespace WebApp
                 return new AuthenticationState(principal);
             }
             else
-            {             
+            {
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
         }

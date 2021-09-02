@@ -1,8 +1,8 @@
-﻿<div class="alert alert-danger" 
+﻿<div class="alert alert-danger"
      style="@($"display: {display}")"
      role="alert">
     @ErrorMessage
-    <button type="button" 
+    <button type="button"
             @onclick="Dismiss"
             class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
@@ -11,7 +11,7 @@
 
 @code {
     string display = "none";
-    
+
     public string ErrorMessage { get; set; }
 
     public void Show()

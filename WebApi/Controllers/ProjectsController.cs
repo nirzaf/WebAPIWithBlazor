@@ -15,7 +15,7 @@ namespace PlatformDemo.Controllers
     [ApiController]
     [Route("api/[controller]")]
     //[CustomTokenAuthFilter]    
-    [Authorize(policy: "WebApiScope")]
+    [Authorize("WebApiScope")]
     public class ProjectsController : ControllerBase
     {
         private readonly BugsContext db;
@@ -40,7 +40,7 @@ namespace PlatformDemo.Controllers
 
             return Ok(project);
         }
-        
+
         [HttpGet]
         [Route("/api/projects/{pid}/tickets")]
         public async Task<IActionResult> GetProjectTickets(int pId)
@@ -59,9 +59,9 @@ namespace PlatformDemo.Controllers
             await db.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetById),
-                    new { id = project.ProjectId },
-                    project
-                );
+                new { id = project.ProjectId },
+                project
+            );
         }
 
         [HttpPut("{id}")]
@@ -81,7 +81,7 @@ namespace PlatformDemo.Controllers
                     return NotFound();
                 throw;
             }
-            
+
 
             return NoContent();
         }
@@ -97,6 +97,5 @@ namespace PlatformDemo.Controllers
 
             return Ok(project);
         }
-
     }
 }
