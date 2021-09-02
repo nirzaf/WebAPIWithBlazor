@@ -24,15 +24,10 @@ namespace MyApp.ApplicationLogic
 
         public async Task<IEnumerable<Ticket>> SearchTickets(string filter)
         {
-            if (int.TryParse(filter, out var ticketId))
-            {
-                var ticket = await ticketRepository.GetByIdAsync(ticketId);
-                var tickets = new List<Ticket>();
-                tickets.Add(ticket);
-                return tickets;
-            }
-
-            return await ticketRepository.GetAsync(filter);
+            if (!int.TryParse(filter, out var ticketId)) return await ticketRepository.GetAsync(filter);
+            var ticket = await ticketRepository.GetByIdAsync(ticketId);
+            var tickets = new List<Ticket> { ticket };
+            return tickets;
         }
 
         public async Task<IEnumerable<Ticket>> ViewOwnersTickets(int projectId, string ownerName)
